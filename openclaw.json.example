@@ -1,0 +1,174 @@
+{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4-6",
+        "fallbacks": ["anthropic/claude-haiku-4-5"]
+      },
+      "workspace": "~/.openclaw/workspace",
+      "userTimezone": "America/Sao_Paulo",
+      "compaction": {
+        "mode": "safeguard",
+        "reserveTokens": 8000,
+        "keepRecentTokens": 20000,
+        "memoryFlush": {
+          "enabled": true,
+          "softThresholdTokens": 150000
+        }
+      },
+      "contextPruning": {
+        "mode": "cache-ttl",
+        "ttl": "2h",
+        "keepLastAssistants": 5,
+        "softTrimRatio": 0.4,
+        "hardClearRatio": 0.85,
+        "tools": {
+          "deny": ["exec", "web_search"]
+        }
+      },
+      "timeoutSeconds": 300,
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8,
+        "runTimeoutSeconds": 600
+      },
+      "memorySearch": {
+        "enabled": true,
+        "provider": "openai",
+        "sources": ["memory", "sessions"],
+        "remote": {
+          "apiKey": "SUA_OPENAI_API_KEY"
+        },
+        "sync": {
+          "onSessionStart": true,
+          "watch": true,
+          "watchDebounceMs": 5000
+        },
+        "query": {
+          "maxResults": 8,
+          "minScore": 0.3
+        }
+      },
+      "heartbeat": {
+        "every": "1h",
+        "activeHours": {
+          "start": "08:00",
+          "end": "22:00",
+          "timezone": "America/Sao_Paulo"
+        },
+        "target": "discord",
+        "to": "channel:SEU_CHANNEL_ID_SISTEMA"
+      }
+    },
+    "list": [
+      { "id": "parzival", "workspace": "~/.openclaw/workspace" },
+      { "id": "art3mis",  "workspace": "~/.openclaw/workspace" },
+      { "id": "aech",     "workspace": "~/.openclaw/workspace" },
+      { "id": "og",       "workspace": "~/.openclaw/workspace" },
+      { "id": "anorak",   "workspace": "~/.openclaw/workspace" },
+      { "id": "daito",    "workspace": "~/.openclaw/workspace" },
+      { "id": "kira",     "workspace": "~/.openclaw/workspace" },
+      { "id": "halliday", "workspace": "~/.openclaw/workspace" },
+      { "id": "shoto",    "workspace": "~/.openclaw/workspace" }
+    ]
+  },
+  "models": {
+    "providers": {
+      "openai": {
+        "baseUrl": "https://api.openai.com/v1",
+        "apiKey": "SUA_OPENAI_API_KEY",
+        "models": [
+          {
+            "id": "gpt-4o-mini-transcribe",
+            "name": "GPT-4o Mini Transcribe",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "tools": {
+    "exec": {
+      "security": "full",
+      "ask": "off"
+    },
+    "web": {
+      "search": {
+        "provider": "brave",
+        "apiKey": "SUA_BRAVE_API_KEY"
+      }
+    },
+    "media": {
+      "audio": {
+        "enabled": true,
+        "models": [
+          {
+            "provider": "openai",
+            "model": "gpt-4o-mini-transcribe"
+          }
+        ]
+      }
+    }
+  },
+  "browser": {
+    "headless": true
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "token": "SEU_BOT_TOKEN",
+      "groupPolicy": "allowlist",
+      "streaming": "off",
+      "dmPolicy": "allowlist",
+      "allowFrom": ["SEU_USER_ID"],
+      "guilds": {
+        "SEU_GUILD_ID": {
+          "requireMention": false,
+          "users": ["SEU_USER_ID"]
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "SEU_GATEWAY_TOKEN"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "http": {
+      "endpoints": {
+        "chatCompletions": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "env": {
+    "vars": {
+      "BRAVE_API_KEY": "SUA_BRAVE_API_KEY",
+      "OPENAI_API_KEY": "SUA_OPENAI_API_KEY"
+    }
+  }
+}

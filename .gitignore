@@ -1,0 +1,22 @@
+# OpenClaw config (contém tokens)
+openclaw.json
+.env
+*.env
+
+# Credenciais
+scripts/*.json
+scripts/.tokens.json
+*-credentials.json
+*-tokens.json
+
+# Logs e cache
+*.log
+.cache/
+memory/*.md
+
+# Node
+node_modules/
+
+# BMAD (gerado localmente, não versionar)
+_bmad/
+_bmad-output/
